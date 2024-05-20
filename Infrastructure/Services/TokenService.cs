@@ -28,27 +28,43 @@ public class TokenService(IDbContextFactory<DataContext> dbContextFactory) : ITo
 
     public async Task<RefreshTokenResult> GetRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
     {
-        await using var context = _dbContextFactory.CreateDbContext();
-
         RefreshTokenResult refreshTokenResult = null!;
 
-        var refreshTokenEntity = await context.RefreshTokens.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken && x.ExpiryDate > DateTime.Now, cancellationToken);
+        try
+        {
+            await using var context = _dbContextFactory.CreateDbContext();
 
-        if (refreshTokenEntity != null)
-        {
-            refreshTokenResult = new RefreshTokenResult()
+          
+
+            var refreshTokenEntity = await context.RefreshTokens.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken && x.ExpiryDate > DateTime.Now, cancellationToken);
+
+            if (refreshTokenEntity != null)
             {
-                StatusCode = (int)HttpStatusCode.OK,
-                Token = refreshTokenEntity.RefreshToken,
-                ExpiryDate = refreshTokenEntity.ExpiryDate,
-            };
+                refreshTokenResult = new RefreshTokenResult()
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Token = refreshTokenEntity.RefreshToken,
+                    ExpiryDate = refreshTokenEntity.ExpiryDate,
+                };
+            }
+            else
+            {
+                refreshTokenResult = new RefreshTokenResult()
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Error = "Refresh Token not found or expired",
+                };
+
+            }
+       
         }
-        else
+
+        catch (Exception ex)
         {
             refreshTokenResult = new RefreshTokenResult()
             {
-                StatusCode = (int)HttpStatusCode.NotFound,
-                Error = "Refresh Token not found or expired",
+                StatusCode = (int)HttpStatusCode.InternalServerError,
+                Error = ex.Message,
             };
 
         }

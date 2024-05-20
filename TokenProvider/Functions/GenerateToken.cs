@@ -23,9 +23,8 @@ namespace TokenProvider.Functions
 
            
 
-            if (tokenRequest == null || tokenRequest.Email == null || tokenRequest.UserId == null)
+            if (tokenRequest == null || tokenRequest.UserId == null|| tokenRequest.Email == null)
             {
-
                 return new BadRequestObjectResult(new { Error = "please provided a valid userId and a valid user email address" });
             }
 
@@ -34,24 +33,28 @@ namespace TokenProvider.Functions
                 RefreshTokenResult refreshTokenResult = null!;
                 AccessTokenResult accessTokenResult = null!;
 
-                using var ctsTimeOut = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                using var ctsTimeOut = new CancellationTokenSource(TimeSpan.FromSeconds(120*1000));
                 using var cts = CancellationTokenSource.CreateLinkedTokenSource(ctsTimeOut.Token, req.HttpContext.RequestAborted);
 
                 req.HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
 
                 if (!string.IsNullOrEmpty(refreshToken))
-                {
                     refreshTokenResult = await _tokenService.GetRefreshTokenAsync(refreshToken, cts.Token);
-                }
+                
                 if (refreshTokenResult == null || refreshTokenResult.ExpiryDate < DateTime.Now.AddDays(1))
-                {
                     refreshTokenResult = await _tokenService.GenerateRefreshTokenAsync(tokenRequest.UserId, cts.Token);
 
-                }
+                
                 accessTokenResult = _tokenService.GenerateAccessToken(tokenRequest, refreshTokenResult.Token);
-                if (accessTokenResult != null && accessTokenResult.Token != null && refreshTokenResult.Token != null && refreshTokenResult.CookieOptions != null)
+
+                if (refreshTokenResult.Token != null && refreshTokenResult.CookieOptions != null)
                 {
                     req.HttpContext.Response.Cookies.Append("refreshToken", refreshTokenResult.Token, refreshTokenResult.CookieOptions);
+                }
+
+                if (accessTokenResult != null && accessTokenResult.Token != null && refreshTokenResult.Token != null)
+                {
+                   
                     return new OkObjectResult(new { AccessToken = accessTokenResult.Token , RefreshToken = refreshTokenResult.Token });
                 }
                    
