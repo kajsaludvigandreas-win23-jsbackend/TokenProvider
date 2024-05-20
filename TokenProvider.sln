@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34723.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TokenProvider", "TokenProvider\TokenProvider.csproj", "{2C80D914-D30E-466B-B597-6917AB94EADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{B8B5A87B-63DD-4075-9B1D-F736C8128D8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C80D914-D30E-466B-B597-6917AB94EADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C80D914-D30E-466B-B597-6917AB94EADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C80D914-D30E-466B-B597-6917AB94EADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C80D914-D30E-466B-B597-6917AB94EADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B5A87B-63DD-4075-9B1D-F736C8128D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B5A87B-63DD-4075-9B1D-F736C8128D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B5A87B-63DD-4075-9B1D-F736C8128D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B5A87B-63DD-4075-9B1D-F736C8128D8D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0546CC2-E281-4A1D-B4CE-EF60E80F4351}
+	EndGlobalSection
+EndGlobal
